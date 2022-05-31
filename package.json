@@ -135,5 +135,11 @@
     "presets": [
       "react-app"
     ]
+  },
+  "devDependencies": {
+    "@babel/plugin-transform-flow-strip-types": "^7.17.12",
+    "babel-eslint": "^10.1.0",
+    "eslint-plugin-no-for-of-loops": "^1.0.1",
+    "eslint-plugin-react-internal": "0.0.1-security"
   }
 }

@@ -77,12 +77,13 @@ const hasJsxRuntime = (() => {
     return false;
   }
 
-  try {
-    require.resolve('react/jsx-runtime');
-    return true;
-  } catch (e) {
-    return false;
-  }
+  // try {
+  //   require.resolve("react/jsx-runtime");
+  //   return true;
+  // } catch (e) {
+
+  return false;
+  // }
 })();
 
 // This is the production and development configuration.
@@ -310,15 +311,19 @@ module.exports = function (webpackEnv) {
         .map(ext => `.${ext}`)
         .filter(ext => useTypeScript || !ext.includes('ts')),
       alias: {
-        // Support React Native Web
-        // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
-        'react-native': 'react-native-web',
-        // Allows for better profiling with ReactDevTools
-        ...(isEnvProductionProfile && {
-          'react-dom$': 'react-dom/profiling',
-          'scheduler/tracing': 'scheduler/tracing-profiling',
-        }),
-        ...(modules.webpackAliases || {}),
+        "react-native": "react-native-web",
+        react: path.resolve(__dirname, "../src/react/packages/react"),
+        "react-dom": path.resolve(__dirname, "../src/react/packages/react-dom"),
+        shared: path.resolve(__dirname, "../src/react/packages/shared"),
+        "react-reconciler": path.resolve(
+          __dirname,
+          "../src/react/packages/react-reconciler"
+        ),
+        "legacy-events": path.resolve(
+          __dirname,
+          "../src/react/packages/legacy-events"
+        ),
+        scheduler: path.resolve(__dirname, "../src/react/packages/scheduler"),
       },
       plugins: [
         // Prevents users from importing files from outside of src/ (or node_modules/).
@@ -419,12 +424,15 @@ module.exports = function (webpackEnv) {
                     },
                   ],
                 ],
-                
+
+                // plugins: [
+                //   isEnvDevelopment &&
+                //     shouldUseReactRefresh &&
+                //     require.resolve("react-refresh/babel"),
+                // ].filter(Boolean),
                 plugins: [
-                  isEnvDevelopment &&
-                    shouldUseReactRefresh &&
-                    require.resolve('react-refresh/babel'),
-                ].filter(Boolean),
+                  require.resolve("@babel/plugin-transform-flow-strip-types"),
+                ],
                 // This is a feature of `babel-loader` for webpack (not Babel itself).
                 // It enables caching results in ./node_modules/.cache/babel-loader/
                 // directory for faster rebuilds.
